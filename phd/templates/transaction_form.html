@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card form-card">
+    <div class="section-head">
+        <div>
+            <p class="eyebrow">Data entry</p>
+            <h3>{{ form_title }}</h3>
+        </div>
+    </div>
+
+    <form class="entry-form" method="post" action="{{ form_action }}">
+        <label>
+            Transaction date
+            <input type="date" name="transaction_date" value="{{ transaction.transaction_date or '' }}" required>
+        </label>
+
+        <label>
+            Entry type
+            <select name="entry_type" required>
+                <option value="">Select type</option>
+                <option value="income" {% if transaction.entry_type == "income" %}selected{% endif %}>Income</option>
+                <option value="expense" {% if transaction.entry_type == "expense" %}selected{% endif %}>Expense</option>
+            </select>
+        </label>
+
+        <label>
+            Category
+            <select name="category" required>
+                <option value="">Select category</option>
+                {% for category in categories %}
+                    <option value="{{ category }}" {% if transaction.category == category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>
+            Description
+            <input type="text" name="description" value="{{ transaction.description or '' }}" placeholder="Example: Supplier payment for March stock" required>
+        </label>
+
+        <label>
+            Amount
+            <input type="number" name="amount" step="0.01" min="0.01" value="{{ transaction.amount or '' }}" required>
+        </label>
+
+        <label>
+            Payment method
+            <select name="payment_method" required>
+                <option value="">Select method</option>
+                {% for method in payment_methods %}
+                    <option value="{{ method }}" {% if transaction.payment_method == method %}selected{% endif %}>{{ method }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>
+            Reference
+            <input type="text" name="reference" value="{{ transaction.reference or '' }}" placeholder="Invoice number or voucher code">
+        </label>
+
+        <label class="full-width">
+            Notes
+            <textarea name="notes" rows="4" placeholder="Optional comments">{{ transaction.notes or '' }}</textarea>
+        </label>
+
+        <div class="form-actions full-width">
+            <a class="button secondary" href="{{ url_for('main.dashboard') }}">Cancel</a>
+            <button class="button primary" type="submit">{{ submit_label }}</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

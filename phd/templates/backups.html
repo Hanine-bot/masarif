@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="backup-layout">
+    <article class="card">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Offline reporting</p>
+                <h3>Export data</h3>
+            </div>
+        </div>
+        <p class="muted">Generate portable accounting files for backup, reporting, or submission.</p>
+        <div class="button-row">
+            <a class="button secondary" href="{{ url_for('main.export_transactions', export_format='csv') }}">Export CSV</a>
+            <a class="button secondary" href="{{ url_for('main.export_transactions', export_format='json') }}">Export JSON</a>
+            <a class="button primary" href="{{ url_for('main.export_transactions', export_format='txt') }}">Export TXT Report</a>
+        </div>
+    </article>
+
+    <article class="card">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Data portability</p>
+                <h3>Import backup</h3>
+            </div>
+        </div>
+        <p class="muted">Import a CSV or JSON backup. For simplicity, the imported file replaces the current dataset.</p>
+        <form class="entry-form compact" method="post" enctype="multipart/form-data">
+            <label class="full-width">
+                Backup file
+                <input type="file" name="backup_file" accept=".csv,.json" required>
+            </label>
+            <div class="form-actions full-width">
+                <button class="button primary" type="submit">Import Backup</button>
+            </div>
+        </form>
+    </article>
+</section>
+
+<section class="card">
+    <div class="section-head">
+        <div>
+            <p class="eyebrow">Recent exports</p>
+            <h3>Generated files</h3>
+        </div>
+    </div>
+    {% if recent_files %}
+        <ul class="file-list">
+            {% for item in recent_files %}
+                <li>{{ item.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="muted">No export files have been generated yet.</p>
+    {% endif %}
+</section>
+{% endblock %}
